@@ -40,7 +40,9 @@ const StationSearch = () => {
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-xl text-gray-600">역번호 검색</h2>
-          <p className="text-gray-500 mb-6">역 이름으로 검색하세요.</p>
+          <p className="text-gray-500 mb-6">
+            역 이름으로 역번호, 상/하행, 호선을 검색합니다.
+          </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">

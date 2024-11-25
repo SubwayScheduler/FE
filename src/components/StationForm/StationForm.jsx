@@ -26,7 +26,7 @@ const StationForm = () => {
         <div>
           <h2 className="font-semibold text-xl text-gray-600">역 정보 수정</h2>
           <p className="text-gray-500 mb-6">
-            역 번호, 이름과 수정/삭제/삽입 정보를 입력하십시오.
+            역 번호를 이용해 이름을 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

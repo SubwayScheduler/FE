@@ -78,7 +78,7 @@ export default function AdminCRUD() {
           </button>
         </li>
       </ul>
-      <div className="mt-14">{renderComponent()}</div>
+      <div className="py-14">{renderComponent()}</div>
     </section>
   );
 }

@@ -28,7 +28,7 @@ const MotormanForm = () => {
             기관사 열차운용 정보 수정
           </h2>
           <p className="text-gray-500 mb-6">
-            기관사 ID, 객차 ID와 수정/삭제/삽입 정보를 입력하십시오.
+            기관사 ID, 객차 ID로 기관사의 열차운용 정보를 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

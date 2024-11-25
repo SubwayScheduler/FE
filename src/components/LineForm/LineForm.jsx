@@ -29,7 +29,7 @@ const LineForm = () => {
             노선 정보 수정
           </h2>
           <p className="text-gray-500 mb-6">
-            역 번호, 상/하행, 호선 번호와 수정/삭제/삽입 정보를 입력하십시오.
+            역 번호를 이용해 상/하행, 호선 번호를 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

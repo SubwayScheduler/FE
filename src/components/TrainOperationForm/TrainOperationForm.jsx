@@ -4,7 +4,7 @@ const TrainOperationForm = () => {
   const [formData, setFormData] = useState({
     trainId: "",
     lineNumber: "",
-    direction: "",
+    capacity: "", // Replaced direction with capacity
     action: "",
   });
 
@@ -29,7 +29,7 @@ const TrainOperationForm = () => {
             열차 운용 정보
           </h2>
           <p className="text-gray-500 mb-6">
-            열차ID, 호선번호, 상/하행, 수정/삭제/삽입 정보를 입력하십시오.
+            열차ID를 이용해 호선번호, 수용량 정보를 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -37,7 +37,7 @@ const TrainOperationForm = () => {
               <div className="text-gray-600">
                 <p className="font-medium text-lg">열차 운용 정보</p>
                 <p>
-                  열차ID, 호선번호, 상/하행 정보를 입력하고 수정/삭제/삽입을
+                  열차ID, 호선번호, 수용량 정보를 입력하고 수정/삭제/삽입을
                   선택하십시오.
                 </p>
               </div>
@@ -70,20 +70,17 @@ const TrainOperationForm = () => {
                     />
                   </div>
 
-                  {/* Direction Field (Upbound/Downbound) */}
+                  {/* Capacity Field */}
                   <div className="md:col-span-2">
-                    <label htmlFor="direction">상/하행</label>
-                    <select
-                      name="direction"
-                      id="direction"
+                    <label htmlFor="capacity">수용량</label>
+                    <input
+                      type="number"
+                      name="capacity"
+                      id="capacity"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value={formData.direction}
+                      value={formData.capacity}
                       onChange={handleChange}
-                    >
-                      <option value="">선택하세요</option>
-                      <option value="Upbound">상행</option>
-                      <option value="Downbound">하행</option>
-                    </select>
+                    />
                   </div>
 
                   {/* Action Field (Edit/Delete/Insert) */}

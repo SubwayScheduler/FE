@@ -3,6 +3,7 @@ import { useState } from "react";
 const CongestionForm = () => {
   const [formData, setFormData] = useState({
     stationNumber: "",
+    direction: "", // Added direction for Upbound/Downbound
     time: "05:30", // default time
     congestion: "",
     action: "", // Action for Edit/Delete/Insert
@@ -43,14 +44,17 @@ const CongestionForm = () => {
             혼잡도 정보 관리
           </h2>
           <p className="text-gray-500 mb-6">
-            역 번호, 시간, 혼잡도 및 수정/삭제/삽입을 입력하십시오.
+            역 번호, 상/하행, 시간, 혼잡도 및 수정/삭제/삽입을 입력하십시오.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
                 <p className="font-medium text-lg">혼잡도 정보 관리</p>
-                <p>역 번호, 시간, 혼잡도 및 수정/삭제/삽입을 입력하십시오.</p>
+                <p>
+                  역 번호, 상/하행, 시간, 혼잡도 및 수정/삭제/삽입을
+                  입력하십시오.
+                </p>
               </div>
 
               <div className="lg:col-span-2">
@@ -66,6 +70,22 @@ const CongestionForm = () => {
                       value={formData.stationNumber}
                       onChange={handleChange}
                     />
+                  </div>
+
+                  {/* Direction Field (Upbound/Downbound) */}
+                  <div className="md:col-span-2">
+                    <label htmlFor="direction">상/하행</label>
+                    <select
+                      name="direction"
+                      id="direction"
+                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                      value={formData.direction}
+                      onChange={handleChange}
+                    >
+                      <option value="">선택하세요</option>
+                      <option value="Upbound">상행</option>
+                      <option value="Downbound">하행</option>
+                    </select>
                   </div>
 
                   {/* Time Field */}
@@ -90,6 +110,8 @@ const CongestionForm = () => {
                   <div className="md:col-span-2">
                     <label htmlFor="congestion">혼잡도</label>
                     <input
+                      type="number"
+                      step="0.01"
                       name="congestion"
                       id="congestion"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
