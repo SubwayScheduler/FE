@@ -18,10 +18,24 @@ const MotormanSearch = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulated response data from the server
+    // Simulated response data from the server including motormanName, motormanId, and trainId
     const mockData = [
-      { motormanName: "name example", motormanId: "motorman1" },
-      { motormanName: "another name", motormanId: "motorman2" },
+      { motormanName: "John Doe", motormanId: "motorman1", trainId: "train1" },
+      {
+        motormanName: "Jane Smith",
+        motormanId: "motorman2",
+        trainId: "train2",
+      },
+      {
+        motormanName: "Bob Johnson",
+        motormanId: "motorman3",
+        trainId: "train3",
+      },
+      {
+        motormanName: "Bob Johnson",
+        motormanId: "motorman3",
+        trainId: "train2",
+      },
     ];
 
     // Filter data based on the input motormanName (case insensitive search)
@@ -91,10 +105,15 @@ const MotormanSearch = () => {
                 {motormans.map((motorman) => (
                   <li key={motorman.motormanId} className="mb-4">
                     <div className="flex justify-between">
-                      <p className="font-medium text-gray-700">
-                        {motorman.motormanName}
+                      <div>
+                        <p className="font-medium text-gray-700">
+                          {motorman.motormanName}
+                        </p>
+                        <p className="text-gray-500">{motorman.motormanId}</p>
+                      </div>
+                      <p className="text-gray-500">
+                        운전 열차 ID: {motorman.trainId}
                       </p>
-                      <p className="text-gray-500">{motorman.motormanId}</p>
                     </div>
                   </li>
                 ))}

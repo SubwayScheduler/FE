@@ -18,11 +18,26 @@ const StationSearch = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulated response data from the server
+    // Simulated response data from the server, including stationName, stationId, bound_to, and line number
     const mockData = [
-      { stationNumber: "001", stationName: "Station A" },
-      { stationNumber: "002", stationName: "Station B" },
-      { stationNumber: "003", stationName: "Station C" },
+      {
+        stationNumber: "001",
+        stationName: "Station A",
+        bound_to: "Upbound",
+        lineNumber: "Line 1",
+      },
+      {
+        stationNumber: "002",
+        stationName: "Station B",
+        bound_to: "Downbound",
+        lineNumber: "Line 2",
+      },
+      {
+        stationNumber: "003",
+        stationName: "Station C",
+        bound_to: "Upbound",
+        lineNumber: "Line 3",
+      },
     ];
 
     // Filter data based on the input stationName (case insensitive search)
@@ -39,9 +54,9 @@ const StationSearch = () => {
     <div className="min-h-20 p-6 bg-gray-100 flex items-center justify-center">
       <div className="container max-w-screen-lg mx-auto">
         <div>
-          <h2 className="font-semibold text-xl text-gray-600">역번호 검색</h2>
+          <h2 className="font-semibold text-xl text-gray-600">역 번호 검색</h2>
           <p className="text-gray-500 mb-6">
-            역 이름으로 역번호, 상/하행, 호선을 검색합니다.
+            역 이름으로 역 번호, 상/하행, 호선 번호를 검색합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -86,18 +101,32 @@ const StationSearch = () => {
               <h3 className="text-xl font-medium text-gray-600">
                 Search Results
               </h3>
-              <ul className="mt-4">
-                {stations.map((station) => (
-                  <li key={station.stationNumber} className="mb-4">
-                    <div className="flex justify-between">
-                      <p className="font-medium text-gray-700">
+              <table className="min-w-full table-auto border-collapse mt-4">
+                <thead>
+                  <tr>
+                    <th className="border-b px-4 py-2 text-left">역 번호</th>
+                    <th className="border-b px-4 py-2 text-left">역 이름</th>
+                    <th className="border-b px-4 py-2 text-left">상/하행</th>
+                    <th className="border-b px-4 py-2 text-left">호선 번호</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stations.map((station) => (
+                    <tr key={station.stationNumber}>
+                      <td className="border-b px-4 py-2">
+                        {station.stationNumber}
+                      </td>
+                      <td className="border-b px-4 py-2">
                         {station.stationName}
-                      </p>
-                      <p className="text-gray-500">{station.stationNumber}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                      </td>
+                      <td className="border-b px-4 py-2">{station.bound_to}</td>
+                      <td className="border-b px-4 py-2">
+                        {station.lineNumber}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
