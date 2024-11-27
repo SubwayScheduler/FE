@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-const MotormanForm = () => {
+const MotormanEditForm = () => {
   const [formData, setFormData] = useState({
     motormanId: "",
-    carriageId: "",
-    action: "", // To store Edit/Delete/Insert action
+    motormanName: "",
   });
+
+  const [responseMessage, setResponseMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,9 +16,43 @@ const MotormanForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const { motormanId, motormanName } = formData;
+
+    if (!motormanId || !motormanName) {
+      setResponseMessage("Error: 기관사 ID와 이름을 모두 입력하세요.");
+      return;
+    }
+
+    const BASE_URL = import.meta.env.VITE_API_URL; // Get base URL from environment variable
+    const apiUrl = `${BASE_URL}/motorman/${motormanId}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ name: motormanName }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setResponseMessage(
+          data.message || "기관사 정보가 성공적으로 수정되었습니다."
+        );
+      } else {
+        const errorData = await response.json();
+        setResponseMessage(
+          `Error: ${errorData.message || "수정에 실패했습니다."}`
+        );
+      }
+    } catch (error) {
+      setResponseMessage(`Error: ${error.message}`);
+    }
   };
 
   return (
@@ -25,17 +60,17 @@ const MotormanForm = () => {
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-xl text-gray-600">
-            기관사 열차운용 정보 수정
+            기관사 정보 수정
           </h2>
           <p className="text-gray-500 mb-6">
-            기관사 ID, 객차 ID로 기관사의 열차운용 정보를 수정합니다.
+            기관사 ID와 이름을 입력하여 정보를 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
-                <p className="font-medium text-lg">기관사 정보</p>
-                <p>기관사 ID, 객차 ID와 수정/삭제/삽입 정보를 입력하십시오.</p>
+                <p className="font-medium text-lg">기관사 수정 정보</p>
+                <p>기관사 ID와 이름을 입력하십시오.</p>
               </div>
 
               <div className="lg:col-span-2">
@@ -53,34 +88,17 @@ const MotormanForm = () => {
                     />
                   </div>
 
-                  {/* Carriage ID Field */}
+                  {/* Motorman Name Field */}
                   <div className="md:col-span-2">
-                    <label htmlFor="carriageId">객차 ID</label>
+                    <label htmlFor="motormanName">기관사 이름</label>
                     <input
                       type="text"
-                      name="carriageId"
-                      id="carriageId"
+                      name="motormanName"
+                      id="motormanName"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value={formData.carriageId}
+                      value={formData.motormanName}
                       onChange={handleChange}
                     />
-                  </div>
-
-                  {/* Action Field (Edit/Delete/Insert) */}
-                  <div className="md:col-span-2">
-                    <label htmlFor="action">수정/삭제/삽입</label>
-                    <select
-                      name="action"
-                      id="action"
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value={formData.action}
-                      onChange={handleChange}
-                    >
-                      <option value="">선택하세요</option>
-                      <option value="Edit">수정</option>
-                      <option value="Delete">삭제</option>
-                      <option value="Insert">삽입</option>
-                    </select>
                   </div>
 
                   {/* Submit Button */}
@@ -91,7 +109,7 @@ const MotormanForm = () => {
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleSubmit}
                       >
-                        Submit
+                        수정
                       </button>
                     </div>
                   </div>
@@ -99,10 +117,23 @@ const MotormanForm = () => {
               </div>
             </div>
           </div>
+
+          {/* Response Message */}
+          {responseMessage && (
+            <div
+              className={`p-4 rounded mb-6 ${
+                responseMessage.startsWith("Error")
+                  ? "bg-red-100 text-red-600"
+                  : "bg-green-100 text-green-600"
+              }`}
+            >
+              {responseMessage}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default MotormanForm;
+export default MotormanEditForm;
