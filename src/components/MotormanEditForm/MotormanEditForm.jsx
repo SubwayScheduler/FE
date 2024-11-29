@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MotormanEditForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     motormanId: "",
     motormanName: "",
@@ -35,6 +37,7 @@ const MotormanEditForm = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name: motormanName }),
       });

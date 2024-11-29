@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const LineCreateForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     lineName: "",
     direction: "", // "ROUND_TRIP" or "CIRCULAR"
@@ -35,6 +37,7 @@ const LineCreateForm = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           route_shape: direction,

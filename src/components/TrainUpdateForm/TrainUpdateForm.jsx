@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const TrainUpdateForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     trainId: "",
-    capacity: "",
     lineId: "",
   });
 
@@ -20,7 +21,7 @@ const TrainUpdateForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { trainId, capacity, lineId } = formData;
+    const { trainId, lineId } = formData;
 
     if (!trainId) {
       setResponseMessage("Error: 객차 ID를 입력하세요.");
@@ -36,9 +37,9 @@ const TrainUpdateForm = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          capacity: capacity ? parseInt(capacity) : undefined,
           Line_ID: lineId ? parseInt(lineId) : undefined,
         }),
       });
@@ -67,14 +68,14 @@ const TrainUpdateForm = () => {
             객차 정보 수정
           </h2>
           <p className="text-gray-500 mb-6">
-            객차 ID, 수용량, 호선 ID를 입력하여 객차 정보를 수정합니다.
+            객차 ID와 호선 ID를 입력하여 객차 정보를 수정합니다.
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
                 <p className="font-medium text-lg">객차 수정 정보</p>
-                <p>객차 ID, 수용량, 호선 ID를 입력하십시오.</p>
+                <p>객차 ID와 호선 ID를 입력하십시오.</p>
               </div>
 
               <div className="lg:col-span-2">
@@ -88,19 +89,6 @@ const TrainUpdateForm = () => {
                       id="trainId"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                       value={formData.trainId}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  {/* Capacity Field */}
-                  <div className="md:col-span-2">
-                    <label htmlFor="capacity">수용량</label>
-                    <input
-                      type="number"
-                      name="capacity"
-                      id="capacity"
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value={formData.capacity}
                       onChange={handleChange}
                     />
                   </div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const LineDeleteForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [lineId, setLineId] = useState(""); // Store the input value for Line ID
   const [responseMessage, setResponseMessage] = useState(""); // Store the response message
 
@@ -24,6 +26,7 @@ const LineDeleteForm = () => {
         method: "DELETE",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

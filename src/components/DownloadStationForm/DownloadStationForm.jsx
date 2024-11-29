@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DownloadStationForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [lineId, setLineId] = useState(""); // Store the Line ID (호선 ID)
   const [responseMessage, setResponseMessage] = useState(""); // Store response or error messages
 
@@ -24,6 +26,7 @@ const DownloadStationForm = () => {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

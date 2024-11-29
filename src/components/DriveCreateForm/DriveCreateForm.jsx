@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DriveCreateForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     trainId: "", // 객차 ID
     motormanId: "", // 기관사 ID
@@ -35,6 +37,7 @@ const DriveCreateForm = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           Train_ID: parseInt(trainId),

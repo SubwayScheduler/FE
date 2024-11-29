@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MotormanDeleteForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     motormanId: "",
   });
@@ -33,6 +35,7 @@ const MotormanDeleteForm = () => {
         method: "DELETE",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

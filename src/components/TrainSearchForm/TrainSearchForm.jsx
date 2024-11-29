@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const TrainSearchForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     lineId: "",
-    capacity: "",
   });
 
   const [trainData, setTrainData] = useState([]);
@@ -27,15 +28,13 @@ const TrainSearchForm = () => {
     if (formData.lineId) {
       apiUrl += `line_id=${formData.lineId}&`;
     }
-    if (formData.capacity) {
-      apiUrl += `capacity=${formData.capacity}&`;
-    }
 
     try {
       const response = await fetch(apiUrl, {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -62,15 +61,14 @@ const TrainSearchForm = () => {
         <div>
           <h2 className="font-semibold text-xl text-gray-600">객차 검색</h2>
           <p className="text-gray-500 mb-6">
-            호선 ID와 수용량을 입력하여 객차를 검색합니다. (입력은 선택
-            사항입니다.)
+            호선 ID를 입력하여 객차를 검색합니다. (수용량 필드는 제외됩니다.)
           </p>
 
           <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
                 <p className="font-medium text-lg">객차 검색</p>
-                <p>호선 ID와 수용량을 입력하십시오.</p>
+                <p>호선 ID를 입력하십시오.</p>
               </div>
 
               <div className="lg:col-span-2">
@@ -84,19 +82,6 @@ const TrainSearchForm = () => {
                       id="lineId"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                       value={formData.lineId}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  {/* Capacity Field */}
-                  <div className="md:col-span-2">
-                    <label htmlFor="capacity">수용량</label>
-                    <input
-                      type="number"
-                      name="capacity"
-                      id="capacity"
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      value={formData.capacity}
                       onChange={handleChange}
                     />
                   </div>
@@ -133,7 +118,6 @@ const TrainSearchForm = () => {
                 <thead>
                   <tr>
                     <th className="px-4 py-2 border-b text-left">호선 ID</th>
-                    <th className="px-4 py-2 border-b text-left">수용량</th>
                     <th className="px-4 py-2 border-b text-left">ID</th>
                   </tr>
                 </thead>
@@ -141,7 +125,6 @@ const TrainSearchForm = () => {
                   {trainData.map((train) => (
                     <tr key={train.ID}>
                       <td className="px-4 py-2 border-b">{train.Line_ID}</td>
-                      <td className="px-4 py-2 border-b">{train.capacity}</td>
                       <td className="px-4 py-2 border-b">{train.ID}</td>
                     </tr>
                   ))}

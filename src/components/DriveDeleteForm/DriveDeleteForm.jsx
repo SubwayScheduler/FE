@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DriveDeleteForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     trainId: "", // 객차 ID
     motormanId: "", // 기관사 ID
@@ -34,6 +36,7 @@ const DriveDeleteForm = () => {
         method: "DELETE",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

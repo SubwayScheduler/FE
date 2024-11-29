@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const CongestionUpdateForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [lineId, setLineId] = useState(""); // Store the Line ID (호선 ID)
   const [csvFile, setCsvFile] = useState(null); // Store the CSV file
   const [responseMessage, setResponseMessage] = useState(""); // Store response or error messages
@@ -30,6 +32,7 @@ const CongestionUpdateForm = () => {
       const deleteResponse = await fetch(deleteUrl, {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
       });
@@ -54,6 +57,7 @@ const CongestionUpdateForm = () => {
       const uploadResponse = await fetch(uploadUrl, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
         body: formData,

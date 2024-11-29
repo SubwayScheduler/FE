@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const LineSearchForm = () => {
+  const { token } = useSelector((state) => state.auth);
   const [searchResults, setSearchResults] = useState([]);
   const [responseMessage, setResponseMessage] = useState("");
 
@@ -15,6 +17,7 @@ const LineSearchForm = () => {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

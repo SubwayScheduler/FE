@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MotormanSearch = () => {
+  const { token } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     motormanName: "",
   });
@@ -27,6 +29,7 @@ const MotormanSearch = () => {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

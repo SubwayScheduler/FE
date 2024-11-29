@@ -10,6 +10,7 @@ import Timetable from "./pages/Timetable/Timetable";
 import Login from "./pages/Login/Login";
 import Admin from "./pages/Admin/Admin";
 import AdminCRUD from "./pages/AdminCRUD/AdminCRUD";
+import Footer from "./components/Footer/Footer";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin-crud" element={<AdminCRUD />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

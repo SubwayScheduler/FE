@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DriveByMotormanSearch = () => {
+  const { token } = useSelector((state) => state.auth);
   const [motormanId, setMotormanId] = useState(""); // Store the input value for Motorman ID
   const [searchResults, setSearchResults] = useState([]);
   const [responseMessage, setResponseMessage] = useState(""); // Store response or error message
@@ -26,6 +28,7 @@ const DriveByMotormanSearch = () => {
         method: "GET",
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
