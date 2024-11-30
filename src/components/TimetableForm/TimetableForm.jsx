@@ -47,6 +47,13 @@ const TimetableForm = () => {
       return;
     }
     setError(null); // Clear previous errors
+
+    // Reset previous data
+    setTrainCount(0);
+    setEtas([]);
+    setStations([]);
+    setTrainSchedules([]);
+
     try {
       const response = await fetch(
         `${
@@ -62,14 +69,54 @@ const TimetableForm = () => {
 
       // Process stations
       let cumulativeTime = 0;
-      const processedStations = data.etas.map((station) => {
-        const timeInSeconds = parseTimeStringToSeconds(station.et);
-        cumulativeTime += timeInSeconds;
-        return {
-          station_name: station.station_name,
-          cumulative_time: cumulativeTime, // in seconds
-        };
-      });
+      let processedStations = [];
+      const routeShape = data.route_shape || "ROUND-TRIP";
+
+      if (routeShape === "CIRCULAR") {
+        // For circular routes, process as before
+        data.etas.forEach((station) => {
+          const timeInSeconds = parseTimeStringToSeconds(station.et);
+          cumulativeTime += timeInSeconds;
+          processedStations.push({
+            station_name: station.station_name,
+            cumulative_time: cumulativeTime,
+          });
+        });
+      } else {
+        // For round-trip routes, include return journey
+        // Forward journey
+        let forwardCumulativeTime = 0;
+        let previousStation = null;
+        const forwardStations = [];
+        data.etas.forEach((station) => {
+          const timeInSeconds = parseTimeStringToSeconds(station.et);
+          forwardCumulativeTime += timeInSeconds;
+          forwardStations.push({
+            station_name: station.station_name,
+            cumulative_time: forwardCumulativeTime,
+          });
+
+          previousStation = station;
+        });
+
+        // Return journey (exclude the first station to avoid duplication)
+        const reverseEtas = data.etas.slice(0, -1).reverse();
+        let reverseCumulativeTime = forwardCumulativeTime;
+        const returnStations = [];
+
+        reverseEtas.forEach((station) => {
+          const timeInSeconds = parseTimeStringToSeconds(previousStation.et);
+          reverseCumulativeTime += timeInSeconds;
+          returnStations.push({
+            station_name: station.station_name,
+            cumulative_time: reverseCumulativeTime,
+          });
+
+          previousStation = station;
+        });
+
+        processedStations = [...forwardStations, ...returnStations];
+      }
       setStations(processedStations);
 
       // Process train schedules
@@ -137,7 +184,7 @@ const TimetableForm = () => {
                 htmlFor="boundTo"
                 className="block text-sm font-medium text-gray-700"
               >
-                내선/외선 (왕복선일 경우 반영되지 않습니다)
+                내선/외선
               </label>
               <select
                 id="boundTo"
@@ -176,17 +223,15 @@ const TimetableForm = () => {
               <h3 className="text-lg font-medium text-gray-600 mb-4">
                 열차 운행 시간표
               </h3>
-              <div className="overflow-x-auto overflow-y-auto max-h-screen text-sm">
+              <div className="overflow-x-auto overflow-y-auto max-h-screen">
                 <table className="min-w-full table-auto border-collapse border border-gray-300">
-                  <thead>
-                    <tr className="tracking-tighter">
-                      <th className="border px-4 py-2 bg-gray-300">
-                        출발 시간
-                      </th>
+                  <thead className="bg-gray-300 tracking-tighter">
+                    <tr>
+                      <th className="border px-4 py-2">출발 시간</th>
                       {stations.map((station) => (
                         <th
                           key={station.station_name}
-                          className="border px-4 py-2 bg-gray-300"
+                          className="border px-4 py-2"
                         >
                           {station.station_name}
                         </th>
