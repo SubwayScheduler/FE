@@ -67,24 +67,31 @@ const TimetableForm = () => {
       setTrainCount(data.train_count);
       setEtas(data.etas);
 
+      // Build et mapping between station pairs
+      const etMapping = {};
+      for (let i = 1; i < data.etas.length; i++) {
+        const stationA = data.etas[i - 1].station_name;
+        const stationB = data.etas[i].station_name;
+        const key = [stationA, stationB].join("->");
+        const etValue = parseTimeStringToSeconds(data.etas[i].et);
+        etMapping[key] = etValue;
+      }
+
       // Process stations
-      let cumulativeTime = 0;
-      let processedStations = [];
       const routeShape = data.route_shape || "ROUND-TRIP";
+      let processedStations = [];
+      let etasToProcess = [...data.etas];
 
       if (routeShape === "CIRCULAR") {
-        // For circular routes, process as before
-        data.etas.forEach((station) => {
-          const timeInSeconds = parseTimeStringToSeconds(station.et);
-          cumulativeTime += timeInSeconds;
-          processedStations.push({
-            station_name: station.station_name,
-            cumulative_time: cumulativeTime,
-          });
-        });
+        if (boundTo === "0") {
+          // For outer loop: reverse stations except the first one
+          const firstStation = etasToProcess[0];
+          const restStations = etasToProcess.slice(1).reverse();
+          etasToProcess = [firstStation, ...restStations];
+        }
+        // No change needed for inner loop (boundTo === "1")
       } else {
-        // For round-trip routes, include return journey
-        // Forward journey
+        // For round-trip routes, process as before (existing logic)
         let forwardCumulativeTime = 0;
         let previousStation = null;
         const forwardStations = [];
@@ -95,7 +102,6 @@ const TimetableForm = () => {
             station_name: station.station_name,
             cumulative_time: forwardCumulativeTime,
           });
-
           previousStation = station;
         });
 
@@ -103,7 +109,6 @@ const TimetableForm = () => {
         const reverseEtas = data.etas.slice(0, -1).reverse();
         let reverseCumulativeTime = forwardCumulativeTime;
         const returnStations = [];
-
         reverseEtas.forEach((station) => {
           const timeInSeconds = parseTimeStringToSeconds(previousStation.et);
           reverseCumulativeTime += timeInSeconds;
@@ -111,12 +116,62 @@ const TimetableForm = () => {
             station_name: station.station_name,
             cumulative_time: reverseCumulativeTime,
           });
-
           previousStation = station;
         });
 
         processedStations = [...forwardStations, ...returnStations];
+        setStations(processedStations);
+
+        // Process train schedules
+        const trainSchedules = data.departure_times.map((departure) => {
+          const departureTimeInSeconds = parseTimeStringToSeconds(
+            departure.departure_time
+          );
+          const arrivalTimes = processedStations.map((station) => {
+            const arrivalTimeInSeconds =
+              departureTimeInSeconds + station.cumulative_time;
+            // Wrap around midnight if necessary
+            const arrivalTimeInSecondsAdjusted = arrivalTimeInSeconds % 86400;
+            return formatSecondsToTimeString(arrivalTimeInSecondsAdjusted);
+          });
+          return {
+            departure_time: departure.departure_time,
+            arrival_times: arrivalTimes, // array of arrival times at each station
+          };
+        });
+        setTrainSchedules(trainSchedules);
+        return; // Exit the function since we've already processed round-trip routes
       }
+
+      // Calculate cumulative times for circular routes
+      let cumulativeTime = 0;
+      etasToProcess.forEach((station, index) => {
+        if (index === 0) {
+          cumulativeTime = 0;
+        } else {
+          const stationA = etasToProcess[index - 1].station_name;
+          const stationB = station.station_name;
+          const key = `${stationA}->${stationB}`;
+          const reverseKey = `${stationB}->${stationA}`;
+          let etValue = etMapping[key];
+
+          if (etValue === undefined) {
+            // Try reverse direction if not found
+            etValue = etMapping[reverseKey];
+          }
+          if (etValue === undefined) {
+            etValue = 60;
+            // throw new Error(
+            //   `역 "${stationA}"와 "${stationB}" 사이의 이동 시간을 찾을 수 없습니다.`
+            // );
+          }
+          cumulativeTime += etValue;
+        }
+        processedStations.push({
+          station_name: station.station_name,
+          cumulative_time: cumulativeTime,
+        });
+      });
       setStations(processedStations);
 
       // Process train schedules
