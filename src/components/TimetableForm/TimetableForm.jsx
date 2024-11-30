@@ -42,10 +42,10 @@ const TimetableForm = () => {
       setError("호선 ID를 입력하세요.");
       return;
     }
-    if (boundTo === "") {
-      setError("내선/외선을 선택하세요.");
-      return;
-    }
+    // if (boundTo === "") {
+    //   setError("내선/외선을 선택하세요.");
+    //   return;
+    // }
     setError(null); // Clear previous errors
 
     // Reset previous data
@@ -58,7 +58,7 @@ const TimetableForm = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }/scheduler/line/${lineId}/departure-times?bound_to=${boundTo}`
+        }/scheduler/line/${lineId}/departure-times?bound_to=${boundTo || "1"}`
       );
       if (!response.ok) {
         throw new Error("시간표 데이터를 가져오는 데 실패했습니다.");
