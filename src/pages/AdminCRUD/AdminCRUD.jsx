@@ -22,6 +22,11 @@ import DownloadCongestionForm from "../../components/DownloadCongestionForm/Down
 
 export default function AdminCRUD() {
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const [expandedGroup, setExpandedGroup] = useState(null);
+
+  const toggleGroup = (group) => {
+    setExpandedGroup((prevGroup) => (prevGroup === group ? null : group));
+  };
 
   const renderComponent = () => {
     switch (selectedMenu) {
@@ -72,164 +77,231 @@ export default function AdminCRUD() {
 
   return (
     <section className="mt-28 mx-auto md:w-9/12">
-      <ul className="flex flex-col gap-y-6 font-bold text-sm">
-        {/* Group 1 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">기관사 관리</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("기관사 등록")}>
-                기관사 등록
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("기관사 검색")}>
-                기관사 검색
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("기관사 수정")}>
-                기관사 수정
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("기관사 삭제")}>
-                기관사 삭제
-              </button>
-            </li>
-          </ul>
-        </li>
-
-        {/* Group 2 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">객차 관리</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("객차 등록")}>
-                객차 등록
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("객차 검색")}>
-                객차 검색
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("객차 수정")}>
-                객차 수정
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("객차 삭제")}>
-                객차 삭제
-              </button>
-            </li>
-          </ul>
-        </li>
-
-        {/* Group 3 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">호선 관리</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("호선 등록")}>
-                호선 등록
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("호선 조회")}>
-                호선 조회
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("호선 수정")}>
-                호선 수정
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("호선 삭제")}>
-                호선 삭제
-              </button>
-            </li>
-          </ul>
-        </li>
-
-        {/* Group 4 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">운전 정보 관리</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("객차별 운전 정보 조회")}>
-                객차별 운전 정보 조회
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button
-                onClick={() => setSelectedMenu("기관사별 운전 정보 조회")}
-              >
-                기관사별 운전 정보 조회
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("운전 정보 등록")}>
-                운전 정보 등록
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button onClick={() => setSelectedMenu("운전 정보 삭제")}>
-                운전 정보 삭제
-              </button>
-            </li>
-          </ul>
-        </li>
-
-        {/* Group 5 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">호선 정보 업데이트</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button
-                onClick={() =>
-                  setSelectedMenu("호선별 역/플랫폼 정보 업데이트")
-                }
-              >
-                호선별 역/플랫폼 정보 업데이트
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button
-                onClick={() => setSelectedMenu("호선별 혼잡도 정보 업데이트")}
-              >
-                호선별 혼잡도 정보 업데이트
-              </button>
-            </li>
-          </ul>
-        </li>
-
-        {/* Group 6 */}
-        <li>
-          <h2 className="text-lg font-bold mb-2">호선 정보 다운로드</h2>
-          <ul className="flex flex-row gap-x-4 flex-wrap">
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button
-                onClick={() => setSelectedMenu("호선별 역 정보 다운로드 (csv)")}
-              >
-                호선별 역 정보 다운로드 (csv)
-              </button>
-            </li>
-            <li className="bg-gray-100 rounded px-3 py-2">
-              <button
-                onClick={() =>
-                  setSelectedMenu("호선별 혼잡도 정보 다운로드 (csv)")
-                }
-              >
-                호선별 혼잡도 정보 다운로드 (csv)
-              </button>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <div className="py-14">{renderComponent()}</div>
+      <div className="flex flex-col md:flex-row gap-x-6 overflow-x-auto">
+        {[
+          "기관사 관리",
+          "객차 관리",
+          "호선 관리",
+          "운전 정보 관리",
+          "호선 정보 업데이트",
+          "호선 정보 다운로드",
+        ].map((group) => (
+          <div
+            key={group}
+            className={`transition-all duration-300 ${
+              expandedGroup === group
+                ? "flex-grow-[2] bg-gray-200"
+                : "flex-grow bg-gray-100"
+            } md:rounded-lg p-4`}
+          >
+            <button
+              className="text-lg font-bold"
+              onClick={() => toggleGroup(group)}
+            >
+              {group}
+            </button>
+            {expandedGroup === group && (
+              <ul className="mt-4 space-y-2">
+                {group === "기관사 관리" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("기관사 등록")}
+                        className="block"
+                      >
+                        기관사 등록
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("기관사 검색")}
+                        className="block"
+                      >
+                        기관사 검색
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("기관사 수정")}
+                        className="block"
+                      >
+                        기관사 수정
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("기관사 삭제")}
+                        className="block"
+                      >
+                        기관사 삭제
+                      </button>
+                    </li>
+                  </>
+                )}
+                {group === "객차 관리" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("객차 등록")}
+                        className="block"
+                      >
+                        객차 등록
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("객차 검색")}
+                        className="block"
+                      >
+                        객차 검색
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("객차 수정")}
+                        className="block"
+                      >
+                        객차 수정
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("객차 삭제")}
+                        className="block"
+                      >
+                        객차 삭제
+                      </button>
+                    </li>
+                  </>
+                )}
+                {group === "호선 관리" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("호선 등록")}
+                        className="block"
+                      >
+                        호선 등록
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("호선 조회")}
+                        className="block"
+                      >
+                        호선 조회
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("호선 수정")}
+                        className="block"
+                      >
+                        호선 수정
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("호선 삭제")}
+                        className="block"
+                      >
+                        호선 삭제
+                      </button>
+                    </li>
+                  </>
+                )}
+                {group === "운전 정보 관리" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("객차별 운전 정보 조회")}
+                        className="block"
+                      >
+                        객차별 운전 정보 조회
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() =>
+                          setSelectedMenu("기관사별 운전 정보 조회")
+                        }
+                        className="block"
+                      >
+                        기관사별 운전 정보 조회
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("운전 정보 등록")}
+                        className="block"
+                      >
+                        운전 정보 등록
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => setSelectedMenu("운전 정보 삭제")}
+                        className="block"
+                      >
+                        운전 정보 삭제
+                      </button>
+                    </li>
+                  </>
+                )}
+                {group === "호선 정보 업데이트" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() =>
+                          setSelectedMenu("호선별 역/플랫폼 정보 업데이트")
+                        }
+                        className="block"
+                      >
+                        호선별 역/플랫폼 정보 업데이트
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() =>
+                          setSelectedMenu("호선별 혼잡도 정보 업데이트")
+                        }
+                        className="block"
+                      >
+                        호선별 혼잡도 정보 업데이트
+                      </button>
+                    </li>
+                  </>
+                )}
+                {group === "호선 정보 다운로드" && (
+                  <>
+                    <li>
+                      <button
+                        onClick={() =>
+                          setSelectedMenu("호선별 역 정보 다운로드 (csv)")
+                        }
+                        className="block"
+                      >
+                        호선별 역 정보 다운로드 (csv)
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() =>
+                          setSelectedMenu("호선별 혼잡도 정보 다운로드 (csv)")
+                        }
+                        className="block"
+                      >
+                        호선별 혼잡도 정보 다운로드 (csv)
+                      </button>
+                    </li>
+                  </>
+                )}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="py-14 min-h-screen">{renderComponent()}</div>
     </section>
   );
 }
